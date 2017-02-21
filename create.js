@@ -61,23 +61,40 @@ else if ( args.backup ) {
   function backup( volume, cb ) {
     // Get the most recent snapshot and back that up
     // snaps is most recent to least recent
-    let snaps = _.reverse( _.sortBy( _.values( volume.Snapshots ), function( item ) { return new Date( item.CreatedTime ).getTime(); } ) );
-    if ( ! snaps.length ) return cb();  // nothing to backup
-    app.log.debug( 'backing up snapshot:', snaps[0].Name );
-    convoy.backupCreate({ SnapshotName: snaps[0].Name, URL: app.config.backupURL }, function( err, result ) {
-      if ( err ) return cb( err );
-      // Its backed up ... should we remove old snapshots now?
-      // MUST KEEP THE ONE WE JUST BACKED UP if we want to enable incrementals, which we do
-      if ( ! app.config.deleteOldSnapshots ) return cb();
-      snaps.shift();
-      if ( ! snaps.length ) return cb();  // no old snaps
-      async.eachSeries( snaps, function( snap, cb ) {
-	app.log.debug( 'deleting old snapshot:', snap.Name );
-	convoy.snapshotDelete({ SnapshotName: snap.Name }, cb );
-      }, function( err ) {
-	cb( err, result );
-      });
-    });
+    async.waterfall([
+      function( cb ) {
+	if ( ! args.createSnapshot ) {
+	  let snaps = _.reverse( _.sortBy( _.values( volume.Snapshots ), function( item ) { return new Date( item.CreatedTime ).getTime(); } ) );
+	  if ( snaps.length ) return cb( null, snaps );
+	}
+	// well, they are asking to back up, so create a snapshot!
+	let m = new Date();
+	let dateSpec = m.getUTCFullYear()+("0" + (m.getUTCMonth()+1)).slice(-2)+("0" + m.getUTCDate()).slice(-2)+("0" + m.getUTCHours()).slice(-2)+("0" + m.getUTCMinutes()).slice(-2)+("0" + m.getUTCSeconds()).slice(-2);
+	let volumeName = volume.Name;
+	let snapshotName = "snap"+volumeName+dateSpec;
+	app.log.debug( 'creating snapshot for', volumeName, ':', snapshotName );
+	convoy.snapshotCreate({ Name: snapshotName, VolumeName: volumeName }, function( err, snap ) {
+	  cb( err, [ snap ] );
+	});
+      },
+      function( snaps, cb ) {
+	app.log.debug( 'backing up snapshot:', snaps[0].Name );
+	convoy.backupCreate({ SnapshotName: snaps[0].Name, URL: app.config.backupURL }, function( err, result ) {
+	  if ( err ) return cb( err );
+	  // Its backed up ... should we remove old snapshots now?
+	  // MUST KEEP THE ONE WE JUST BACKED UP if we want to enable incrementals, which we do
+	  if ( ! app.config.deleteOldSnapshots ) return cb();
+	  snaps.shift();
+	  if ( ! snaps.length ) return cb( null, result );  // no old snaps
+	  async.eachSeries( snaps, function( snap, cb ) {
+	    app.log.debug( 'deleting old snapshot:', snap.Name );
+	    convoy.snapshotDelete({ SnapshotName: snap.Name }, cb );
+	  }, function( err ) {
+	    cb( err, result );
+	  });
+	});
+      }
+    ], cb );
   }
 
   convoy.volumes( function( err, result ) {
@@ -202,4 +219,5 @@ function notify( level, err, cb ) {
 }
 
 function emailer( level, err, cb ) {
+  process.nextTick( cb );
 }

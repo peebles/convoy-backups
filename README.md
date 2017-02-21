@@ -72,7 +72,16 @@ sudo convoy daemon --drivers devicemapper --driver-opts dm.datadev=/dev/xvdh1 --
 ```
 
 You can run that manually, but it is probably a safer bet to run it as a service so it will be run again if
-your machine reboots.
+your machine reboots.  There is a "convoy.init.d" script here I found [here](https://gist.github.com/colebrumley/6d9adff025e826772277)
+that might be useful. You need to edit it and add the correct **CONVOY_OPTS**.
+
+Then copy it to /etc/init.d/convoy on the host machine and:
+
+```bash
+sudo chmod +x /etc/init.d/convoy
+sudo sudo update-rc.d convoy defaults
+sudo /etc/init.d/convoy start
+```
 
 **If you are going to backup volumes to S3** then you need to make your AWS credentials available to the convoy daemon.
 You can do this in a variety of ways.  See [this](https://github.com/aws/aws-sdk-go#configuring-credentials) for some
@@ -154,3 +163,10 @@ docker exec -it backups node create.js --restore --volume NEW-VOLUME-NAME --back
 
 When its done you can use the newly created volume, which should have the contents of the backup.
 
+### Backup Now
+
+Sometimes you just want to back it up now!
+
+```bash
+docker exec -it backups node create.js --backup --volume NEW-VOLUME-NAME --createSnapshot
+```
