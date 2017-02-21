@@ -1,0 +1,14 @@
+{
+  "default": {
+    "logger": {
+      "type": "ENV:BKUP_LOGGER_TYPE:docker-logger",
+      "options": {
+	"console": { "enabled": true, "level": "debug" },
+	"file": { "enabled": false },
+	"syslog": { "enabled": false }
+      }
+    },
+    "backupURL": "s3://sm-snapshots@us-west-2/",
+    "deleteOldSnapshots": true
+  }
+}

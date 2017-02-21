@@ -1,0 +1,11 @@
+backups:
+  build: .
+  dockerfile: Dockerfile
+  container_name: backups
+  restart: always
+  environment:
+    - BACKUP_TO=s3
+    - S3_BUCKET=sm-snapshots
+    - REGION=us-west-2
+  volumes:
+    - /var/run/convoy:/var/run/convoy

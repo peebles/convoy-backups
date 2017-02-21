@@ -1,0 +1,13 @@
+convoy:
+  build: .
+  dockerfile: Dockerfile.nfs
+  container_name: convoy
+  privileged: true
+  restart: always
+  environment:
+    - VOLUMES=/mnt
+  volumes:
+    - /var/run/convoy:/var/run/convoy
+    - /etc/docker/plugins:/etc/docker/plugins
+    - /var/lib/rancher/:/var/lib/rancher/
+    - /mnt:/mnt

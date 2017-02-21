@@ -1,0 +1,11 @@
+# /etc/crontab: system-wide crontab
+
+# create snapshots of all volumes once per hour
+# create backups of the most recent snapshots once per day
+
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+# m h dom mon dow user	command
+0 *	* * *	root    cd /deploy && node create.js --snapshot
+0 0	* * *	root	cd /deploy && node create.js --backup

@@ -1,0 +1,33 @@
+{
+  "name": "convoy-backups",
+  "version": "0.0.1",
+  "description": "Manage scheduled snapshots and backups for a Convoy deployment",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peebles/convoy-backups.git"
+  },
+  "keywords": [
+    "convoy",
+    "backup",
+    "docker"
+  ],
+  "author": "Andrew Peebles",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/peebles/convoy-backups/issues"
+  },
+  "homepage": "https://github.com/peebles/convoy-backups#readme",
+  "dependencies": {
+    "async": "^2.1.5",
+    "docker-logger": "0.0.21",
+    "env-friendly-config": "^1.0.5",
+    "lodash": "^4.17.4",
+    "node-convoy": "0.0.2",
+    "nodemailer": "^3.1.3",
+    "winston": "^2.3.1"
+  }
+}
