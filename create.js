@@ -215,9 +215,28 @@ function exit( err ) {
 function notify( level, err, cb ) {
   app.log[ level ]( err );
   if ( ! app.config.emailer ) return process.nextTick( cb );
+  if ( ! app.config.emailer.enabled ) return process.nextTick( cb );
   emailer( level, err, cb );
 }
 
 function emailer( level, err, cb ) {
-  process.nextTick( cb );
+  let message;
+  if ( err instanceof Error ) message = err.message;
+  else message = err;
+
+  let nodemailer = require('nodemailer');
+  let transporter = nodemailer.createTransport( app.config.emailer.transporter[ app.config.emailer.transportType ] );
+
+  app.log.debug( 'sending email to:', app.config.emailer.to, 'message:', message );
+  
+  transporter.sendMail({
+    to: app.config.emailer.to,
+    from: app.config.emailer.from,
+    subject: level + ': Backup notification from hostname ' + require( 'os' ).hostname(),
+    text: level + ': ' + message
+  }, function( err, result ) {
+    if ( err ) app.log.error( err );
+    app.log.debug( result );
+    cb();
+  });
 }

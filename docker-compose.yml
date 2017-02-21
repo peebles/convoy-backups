@@ -4,8 +4,12 @@ backups:
   container_name: backups
   restart: always
   environment:
-    - BACKUP_TO=s3
-    - S3_BUCKET=sm-snapshots
-    - REGION=us-west-2
+    BKUP_LOGGER_CONSOLE_ENABLED: "true"
+    BKUP_LOGGER_CONSOLE_LEVEL: "debug"
+    BKUP_LOGGER_FILE_ENABLED: "false"
+    BKUP_LOGGER_SYSLOG_ENABLED: "false"
+    BKUP_BACKUP_URL: "s3://sm-snapshots@us-west-2/"
+    BKUP_DELETE_OLD_SNAPSHOTS: "true"
+    BKUP_EMAIL_ENABLED: "false"
   volumes:
     - /var/run/convoy:/var/run/convoy

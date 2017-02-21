@@ -120,8 +120,68 @@ docker-compose -f docker-compose-nfs.yml up -d
 
 ## Configuring and Running Backups
 
-You will need to edit `crontab` and `config.json` here in this directory.
+### Cron
 
+Snapshots and backups are taken periodically using cron.  The file here called "crontab" is installed into /etc/crontab.  This file
+is taking a snapshot of every volume once per hour, and then doing a backup of the most recent snapshot of every volume once per day.
+If this is what you want, then you don't have to do anything special.  If you want to do something else, then edit this file before
+building the container.  You can create snapshots and backups of individual volumes by name.  Like this:
+
+    0 *	* * *	root    cd /deploy && node create.js --snapshot --volume vol1 # snapshot vol1 once per hour
+    0 0	* * *	root	cd /deploy && node create.js --backup   --volume vol1 # backup vol1 once per day
+    0 *	* * *	root    cd /deploy && node create.js --backup   --volume vol2 --createSnapshot # backup vol2 once per hour
+
+### Backup Configuration
+
+Backups are stored either on S3 or on a NFS partition (somewhere on the host system's filesystem).  You must supply an
+environment variable to control this.  For S3, it looks like:
+
+    BKUP_BACKUP_URL=s3://BUCKET-NAME@REGION/
+
+and for NFS it should look like
+
+    BKUP_BACKUP_URL=vfs://FULLPATH-TO-DIRECTORY
+
+By default when a backup is made, it is made from the most recent snapshot.  The most recent snapshot should be saved so
+that the next backup can be incremental.  But older snapshots can be removed, and are removed by default.  If for some reason
+you want to keep all snapshots, you can set:
+
+    BKUP_DELETE_OLD_SNAPSHOTS=false
+
+### Logging
+
+The logger supports writing log messages to console, file or syslog or any combination of the three ... including no logging.  This
+is all controlled by environment variables.  The defaults are shown:
+
+    BKUP_LOGGER_CONSOLE_ENABLED=true
+    BKUP_LOGGER_CONSOLE_LEVEL=debug
+    
+    BKUP_LOGGER_FILE_ENABLED=false
+    BKUP_LOGGER_FILE_LEVEL=debug
+    BKUP_LOGGER_FILE_LOCATION=/tmp/backups.log
+    
+    BKUP_LOGGER_SYSLOG_ENABLED=false
+    BKUP_LOGGER_SYSLOG_LEVEL=debug
+    BKUP_LOGGER_SYSLOG_PORT=3030
+    BKUP_LOGGER_SYSLOG_SERVER=10.10.10.10
+    
+### Email
+
+You can have emails sent when errors occur.  You can employ your own SMTP server or use AWS SES to send emails.  Defaults are shown:
+
+    BKUP_EMAIL_ENABLED=false
+    BKUP_EMAIL_TRANSPORT=smtp  (or ses)
+    BKUP_EMAIL_FROM=support@newco.co
+    BKUP_EMAIL_TO=alert@newco.co
+    
+    BKUP_EMAIL_SMTP_PORT=465
+    BKUP_EMAIL_SMTP_HOST=smtp.sendgrid.net
+    BKUP_EMAIL_SMTP_USER=username
+    BKUP_EMAIL_SMTP_PASS=password
+    
+    BKUP_EMAIL_SES_AWS_ACCESS_KEY_ID=AKID1234567890
+    BKUP_EMAIL_SES_AWS_SECRET_ACCESS_KEY=MY-SECRET-KEY
+    
 ## Maintanence Tasks
 
 ### Creating Volumes

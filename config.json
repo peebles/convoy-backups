@@ -3,12 +3,58 @@
     "logger": {
       "type": "ENV:BKUP_LOGGER_TYPE:docker-logger",
       "options": {
-	"console": { "enabled": true, "level": "debug" },
-	"file": { "enabled": false },
-	"syslog": { "enabled": false }
+	"console": {
+	  "enabled": "ENV:BKUP_LOGGER_CONSOLE_ENABLED:true",
+	  "level": "ENV:BKUP_LOGGER_CONSOLE_LEVEL:debug"
+	},
+	"file": {
+	  "enabled": "ENV:BKUP_LOGGER_FILE_ENABLED:false",
+	  "level": "ENV:BKUP_LOGGER_FILE_LEVEL:debug",
+	  "location": "ENV:BKUP_LOGGER_FILE_LOCATION:/tmp/backups.log"
+	},
+	"syslog": {
+	  "enabled": "ENV:BKUP_LOGGER_SYSLOG_ENABLED:false",
+	  "level": "ENV:BKUP_LOGGER_SYSLOG_LEVEL:debug",
+	  "port": "ENV:BKUP_LOGGER_SYSLOG_PORT:3030",
+	  "server": "ENV:BKUP_LOGGER_SYSLOG_SERVER:10.10.10.10",
+	  "type": "ENV:BKUP_LOGGER_SYSLOG_TYPE:TCP_META"
+	}
       }
     },
-    "backupURL": "s3://sm-snapshots@us-west-2/",
-    "deleteOldSnapshots": true
+    "backupURL": "ENV:BKUP_BACKUP_URL:s3://sm-snapshots@us-west-2/",
+    "deleteOldSnapshots": "ENV:BKUP_DELETE_OLD_SNAPSHOTS:true",
+    "emailer": {
+      "enabled": "ENV:BKUP_EMAIL_ENABLED:false",
+      "transportType": "ENV:BKUP_EMAIL_TRANSPORT:smtp",
+      "from": "ENV:BKUP_EMAIL_FROM:support@newco.co",
+      "to": "ENV:BKUP_EMAIL_TO:alert@newco.co",
+      "transporter": {
+	"smtp": {
+	  "auth": {
+	    "user": "ENV:BKUP_EMAIL_SMTP_USER:username",
+            "pass": "ENV:BKUP_EMAIL_SMTP_PASS:password"
+	  },
+	  "port": "ENV:BKUP_EMAIL_SMTP_PORT:465",
+          "host": "ENV:BKUP_EMAIL_SMTP_HOST:smtp.sendgrid.net",
+          "secure": "ENV:BKUP_EMAIL_SMTP_SECURE:true",
+          "ignoreTLS": "ENV:BKUP_EMAIL_SMTP_IGNORETLS:false",
+          "requireTLS": "ENV:BKUP_EMAIL_SMTP_REQUIRETLS:true",
+          "name": "ENV:BKUP_EMAIL_SMTP_NAME:newco",
+          "localAddress": "ENV:BKUP_EMAIL_SMTP_LOCAL_ADDRESS:0.0.0.0",
+          "connectionTimeout": "ENV:BKUP_EMAIL_SMTP_CONNECTION_TIMEOUT:3000",
+          "greetingTimeout": "ENV:BKUP_EMAIL_SMTP_GREETING_TIMEOUT:3000",
+          "socketTimeout": "ENV:BKUP_EMAIL_SMTP_SOCKET_TIMEOUT:5000",
+          "debug": "ENV:BKUP_EMAIL_SMTP_DEBUG:false",
+          "lmtp": "ENV:BKUP_EMAIL_SMTP_LMTP:false",
+          "authMethod": "ENV:BKUP_EMAIL_SMTP_AUTH:PLAIN",
+          "tls": {}
+	},
+	"ses": {
+	  "transport": "ses",
+	  "accessKeyId": "ENV:BKUP_EMAIL_SES_AWS_ACCESS_KEY_ID:AKID1234567890",
+	  "secretAccessKey": "ENV:BKUP_EMAIL_SES_AWS_SECRET_ACCESS_KEY:MY-SECRET-KEY"
+	}
+      }
+    }
   }
 }
