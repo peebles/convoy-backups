@@ -88,7 +88,7 @@ From the convoy documentation:
 
 *First, mount the NFS share to the root directory used to store volumes. Substitute <vfs_path> to the appropriate directory of your choice:*
 
-``bash
+```bash
 sudo mkdir <vfs_path>
 sudo mount -t nfs <nfs_server>:/path <vfs_path>
 ```
@@ -124,7 +124,7 @@ already exist.  But you can manually create a volume before launching a containe
 docker exec -it backups node create.js --create --volume VOLUME-NAME --size 40G [--type ext4]
 ```
 
-After that returns, ,you should now be able to run a docker container with that new volume.
+After that returns, you should now be able to run a docker container with that new volume.
 
 ### Removing Volumes
 
