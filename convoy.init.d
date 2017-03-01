@@ -31,9 +31,23 @@ plugin_spec_file=/etc/docker/plugins/convoy.spec
 ### CHANGE THESE AS APPROPRIATE
 ##########################################################
 
-export AWS_ACCESS_KEY_ID=AKID1234567890
-export AWS_SECRET_ACCESS_KEY=MY-SECRET-KEY
-CONVOY_OPTS="--drivers devicemapper --driver-opts dm.datadev=/dev/xvdh1 --driver-opts dm.metadatadev=/dev/xvdh2"
+## FOR STORING BACKUPS TO S3 and for using EBS DRIVER
+export AWS_ACCESS_KEY_ID="AKID1234567890"
+export AWS_SECRET_ACCESS_KEY="MY-SECRET-KEY"
+export AWS_DEFAULT_REGION="us-west-2"
+
+## DEVICE MAPPER DRIVER
+export BLOCK_DEVICE="xvhd"
+CONVOY_OPTS="--drivers devicemapper --driver-opts dm.datadev=/dev/${BLOCK_DEVICE}1 --driver-opts dm.metadatadev=/dev/${BLOCK_DEVICE}2"
+
+## VFS DRIVER
+# export VFS_PATH="PATH-TO-MOUNTED-NFS-PARTITION"
+# CONVOY_OPTS="--drivers vfs --driver-opts vfs.path=$VFS_PATH"
+
+## EBS DRIVER
+# export AWS_KMS_KEY_ID="YOUR-KMS-KEY-ID"
+# export AWS_DEFAULT_EBS_VOLUME_SIZE="10G"
+# CONVOY_OPTS="--drivers ebs --driver-opts ebs.defaultkmskeyid=$AWS_KMS_KEYID --driver-opts ebs.defaultvolumesize=$AWS_DEFAULT_EBS_VOLUME_SIZE"
 
 ##########################################################
 ##########################################################
