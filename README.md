@@ -118,6 +118,19 @@ docker-compose -f docker-compose-nfs.yml build
 docker-compose -f docker-compose-nfs.yml up -d
 ```
 
+## EBS
+
+Run the convoy daemon something like this:
+
+```bash
+AWS_ACCESS_KEY_ID=XXXX \
+AWS_SECRET_ACCESS_KEY=YYYY \
+AWS_DEFAULT_REGION=us-west-2 \
+convoy daemon --drivers ebs --driver-opts ebs.defaultkmskeyid=YOUR-KMS-KEY --driver-opts ebs.defaultvolumesize=10G --driver-opts ebs.fsfreeze=true
+```
+
+See [EBS.md](EBS.md) here for some more detail.
+
 ## Configuring and Running Backups
 
 ### Cron
