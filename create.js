@@ -81,6 +81,13 @@ else if ( args.remove ) {
     exit();
   });    
 }
+else if ( args.backupRemove ) {
+  api.backupRemove( args, function( err ) {
+    if ( err ) return exit( err );
+    console.log( 'backup', (args.url || args.URL || args.BackupURL), 'removed!' );
+    exit();
+  });    
+}
 else {
   notify( 'error', 'Unknown operation: must specify --snapshot or --backup', function() {
     process.exit(1);

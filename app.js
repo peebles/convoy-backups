@@ -33,7 +33,7 @@ app.use(bodyParser.urlencoded({
   parameterLimit:50000
 }));
 
-[ 'snapshot', 'backup', 'backups', 'volumes', 'restore', 'create', 'remove' ].forEach( function( endpoint ) {
+[ 'snapshot', 'backup', 'backups', 'volumes', 'restore', 'create', 'remove', 'backupRemove' ].forEach( function( endpoint ) {
   
   app.post( '/api/'+endpoint, function( req, res, next ) {
     app.lib.functions[ endpoint ]( req.body, function( err, result ) {
