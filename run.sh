@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # capture the environment for the cron scripts
-env >/etc/profile.d/backups.sh
+env | grep -v == | awk -F= '{print $1 "=" "\"" $2 "\""}' >/etc/profile.d/backups.sh
 
 # start up cron
 /etc/init.d/cron start

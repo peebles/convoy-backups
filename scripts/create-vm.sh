@@ -114,12 +114,3 @@ docker-machine create --driver amazonec2 \
   --amazonec2-instance-type $InstanceType \
   $hostname || exit 1
 
-# copy the information from $HOME/.docker/machine/machines/$hostname
-# to ./machines/$hostname so that, if desired, this information can
-# be shared with team members.  BUT BY DEFAULT ./machines is git-ignored.
-# If you have a private repo and want to share, then delete the line
-# with "machines" in .gitignore.
-
-cp -r $HOME/.docker/machine/machines/$hostname ./machines
-docker-machine env $hostname | grep DOCKER_HOST > ./machines/$hostname/HOST
-
