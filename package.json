@@ -23,8 +23,11 @@
   "homepage": "https://github.com/peebles/convoy-backups#readme",
   "dependencies": {
     "async": "^2.1.5",
+    "body-parser": "^1.16.1",
+    "consign": "^0.1.2",
     "docker-logger": "0.0.21",
     "env-friendly-config": "^1.0.5",
+    "express": "^4.14.1",
     "lodash": "^4.17.4",
     "node-convoy": "0.0.2",
     "nodemailer": "2.6.4",

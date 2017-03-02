@@ -6,6 +6,9 @@
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
+# /etc/profile.d/backups.sh was created in run.sh with all of
+# the docker env vars, so the config.json works properly.
+
 # m h dom mon dow user	command
-0 *	* * *	root    cd /deploy && node create.js --snapshot
-0 0	* * *	root	cd /deploy && node create.js --backup
+0 *	* * *	root    . /etc/profile; cd /deploy && node create.js --snapshot
+0 0	* * *	root	. /etc/profile; cd /deploy && node create.js --backup

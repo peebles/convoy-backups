@@ -208,6 +208,12 @@ docker exec -it backups node create.js --create --volume VOLUME-NAME --size 40G 
 
 After that returns, you should now be able to run a docker container with that new volume.
 
+### List of Volumes
+
+```bash
+docker exec -it backups node create.js --volumes
+```
+
 ### Removing Volumes
 
 You can delete a volume.  When a volume is deleted all of its snapshots will be deleted (usually only
@@ -224,7 +230,7 @@ You can create a new volume initialized with a backup, and then use that volume 
 how you would restore from backup.  First, get a list of all the available backups for a volume:
 
 ```bash
-docker exec -it backups node create.js --list --volume VOLUME-NAME
+docker exec -it backups node create.js --backups --volume VOLUME-NAME
 ```
 
 That will produce a list that shows all the backups for that volume, most recent to least recent, along with the
@@ -243,3 +249,20 @@ Sometimes you just want to back it up now!
 ```bash
 docker exec -it backups node create.js --backup --volume NEW-VOLUME-NAME --createSnapshot
 ```
+
+## Web APIs
+
+There is a small web server listening on port 3000 that you can use to invoke the management functions
+via REST api.  The following endpoints are defined:
+
+* /api/snapshot
+* /api/backup
+* /api/backups
+* /api/volumes
+* /api/restore
+* /api/create
+* /api/remove
+
+They all are POSTs which can take `application/json` or `application/x-www-form-urlencoded` with the
+same arguments as the docker commands shown above.  They all return the native json blobs that the
+convoy driver returns.

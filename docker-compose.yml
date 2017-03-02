@@ -11,5 +11,7 @@ backups:
     BKUP_BACKUP_URL: "s3://sm-snapshots@us-west-2/"
     BKUP_DELETE_OLD_SNAPSHOTS: "true"
     BKUP_EMAIL_ENABLED: "false"
+  ports:
+    - "80:3000"
   volumes:
     - /var/run/convoy:/var/run/convoy
