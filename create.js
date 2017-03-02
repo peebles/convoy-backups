@@ -100,6 +100,7 @@ function notify( level, err, cb ) {
   app.log[ level ]( err );
   if ( ! app.config.emailer ) return process.nextTick( cb );
   if ( ! app.config.emailer.enabled ) return process.nextTick( cb );
+  if ( level != 'error' && args.nomail ) return process.nextTick( cb );
   emailer( level, err, cb );
 }
 

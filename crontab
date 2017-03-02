@@ -10,5 +10,5 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 # the docker env vars, so the config.json works properly.
 
 # m h dom mon dow user	command
-0 *	* * *	root    . /etc/profile; cd /deploy && node create.js --snapshot
-0 0	* * *	root	. /etc/profile; cd /deploy && node create.js --backup
+0 *	* * *	root    eval $(cat /etc/profile.d/backups.sh); cd /deploy && node create.js --snapshot --nomail
+0 0	* * *	root	eval $(cat /etc/profile.d/backups.sh); cd /deploy && node create.js --backup
