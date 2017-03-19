@@ -47,7 +47,7 @@ CONVOY_OPTS="--drivers devicemapper --driver-opts dm.datadev=/dev/${BLOCK_DEVICE
 ## EBS DRIVER
 # export AWS_KMS_KEY_ID="YOUR-KMS-KEY-ID"
 # export AWS_DEFAULT_EBS_VOLUME_SIZE="10G"
-# CONVOY_OPTS="--drivers ebs --driver-opts ebs.defaultkmskeyid=$AWS_KMS_KEYID --driver-opts ebs.defaultvolumesize=$AWS_DEFAULT_EBS_VOLUME_SIZE"
+# CONVOY_OPTS="--drivers ebs --driver-opts ebs.defaultencrypted=true --driver-opts ebs.defaultkmskeyid=$AWS_KMS_KEY_ID --driver-opts ebs.defaultvolumesize=$AWS_DEFAULT_EBS_VOLUME_SIZE"
 
 ##########################################################
 ##########################################################
