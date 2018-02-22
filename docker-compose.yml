@@ -4,13 +4,25 @@ backups:
   container_name: backups
   restart: always
   environment:
+    APP_NAME: "backups"
+    BKUP_CRON: "0 0 * * *"
     BKUP_LOGGER_CONSOLE_ENABLED: "true"
-    BKUP_LOGGER_CONSOLE_LEVEL: "debug"
+    BKUP_LOGGER_CONSOLE_LEVEL: "error"
     BKUP_LOGGER_FILE_ENABLED: "false"
-    BKUP_LOGGER_SYSLOG_ENABLED: "false"
-    BKUP_BACKUP_URL: "s3://sm-snapshots@us-west-2/"
-    BKUP_DELETE_OLD_SNAPSHOTS: "true"
-    BKUP_EMAIL_ENABLED: "false"
+    BKUP_LOGGER_SYSLOG_ENABLED: "true"
+    BKUP_LOGGER_SYSLOG_LEVEL: "debug"
+    BKUP_LOGGER_SYSLOG_SERVER: "_SYSLOG_SERVER_IP_"
+    BKUP_LOGGER_SYSLOG_PORT: "3030"
+    BKUP_BACKUP_URL: "not-used-with-ebs"
+    BKUP_DELETE_OLD_SNAPSHOTS: "false"
+    BKUP_EMAIL_ENABLED: "true"
+    BKUP_EMAIL_TRANSPORT: "smtp"
+    BKUP_EMAIL_FROM: "noreply@yourco.com"
+    BKUP_EMAIL_TO: "icare@yourco.com"
+    BKUP_EMAIL_SMTP_PORT: "465"
+    BKUP_EMAIL_SMTP_HOST: "smtp.gmail.com"
+    BKUP_EMAIL_SMTP_USER: "_SMTP_ADMIN_@yourco.com"
+    BKUP_EMAIL_SMTP_PASS: "_SMTP_PASSWORD_"
   ports:
     - "80:3000"
   volumes:

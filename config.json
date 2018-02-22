@@ -3,6 +3,7 @@
     "logger": {
       "type": "ENV:BKUP_LOGGER_TYPE:docker-logger",
       "options": {
+	"includeNodeEnv": true,
 	"console": {
 	  "enabled": "ENV:BKUP_LOGGER_CONSOLE_ENABLED:true",
 	  "level": "ENV:BKUP_LOGGER_CONSOLE_LEVEL:debug"

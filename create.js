@@ -119,7 +119,7 @@ function emailer( level, err, cb ) {
   api.email({
     to: app.config.emailer.to,
     from: app.config.emailer.from,
-    subject: level + ': Backup notification from hostname ' + require( 'os' ).hostname(),
+    subject: level + ': Backup notification from hostname ' + require( 'os' ).hostname() + ': env: ' + process.env.NODE_ENV,
     text: level + ': ' + message
   }, function( err, result ) {
     if ( err ) app.log.error( err );

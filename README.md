@@ -135,14 +135,8 @@ See [EBS.md](EBS.md) here for some more detail.
 
 ### Cron
 
-Snapshots and backups are taken periodically using cron.  The file here called "crontab" is installed into /etc/crontab.  This file
-is taking a snapshot of every volume once per hour, and then doing a backup of the most recent snapshot of every volume once per day.
-If this is what you want, then you don't have to do anything special.  If you want to do something else, then edit this file before
-building the container.  You can create snapshots and backups of individual volumes by name.  Like this:
-
-    0 *	* * *	root    cd /deploy && node create.js --snapshot --volume vol1 # snapshot vol1 once per hour
-    0 0	* * *	root	cd /deploy && node create.js --backup   --volume vol1 # backup vol1 once per day
-    0 *	* * *	root    cd /deploy && node create.js --backup   --volume vol2 --createSnapshot # backup vol2 once per hour
+The `run.sh` bootstrap script is setting up cron.  It uses the environment variable `BKUP_CRON` which is established in "docker-compose.yml".
+It basically backs up all the managed volumes on the schedule set by `BKUP_CRON`.
 
 ### Backup Configuration
 
