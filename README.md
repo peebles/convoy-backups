@@ -46,9 +46,9 @@ purposes.  Use them at your own risk!
 Once the block device is attached to your machine, ssh into the machine and install convoy:
 
 ```bash
-wget https://github.com/peebles/convoy/releases/download/v0.5.0-peeb/convoy.tar.gz
+wget https://github.com/peebles/convoy/releases/download/v0.5.1-peeb/convoy.tar.gz
 tar xvzf convoy.tar.gz
-sudo cp convoy/convoy convoy/convoy-pdata_tools /usr/local/bin/
+sudo cp bin/convoy bin/convoy-pdata_tools /usr/local/bin/
 rm -rf convoy*
 wget https://raw.githubusercontent.com/rancher/convoy/master/tools/dm_dev_partition.sh
 chmod +x dm_dev_partition.sh
