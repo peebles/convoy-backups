@@ -100,7 +100,9 @@ case "$1" in
 			  --socket="$CONVOY_SOCKETFILE" daemon $CONVOY_OPTS \
 			  >> "$CONVOY_LOGFILE" 2>&1
 	log_end_msg $?
-	sleep 2
+	while [ ! -e "$CONVOY_SOCKETFILE" ]; do
+	    sleep 2
+	done
 	if [ "$(stat --format="%a" $CONVOY_SOCKETFILE)" != "660" ]; then
 	    chmod 0660 $CONVOY_SOCKETFILE 2> /dev/null
 	    ok=$?
